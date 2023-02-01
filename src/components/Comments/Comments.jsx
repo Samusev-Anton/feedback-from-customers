@@ -4,17 +4,40 @@ import { Comment } from "../Comment/Comment";
 import { Grid } from "../Grid/Grid";
 // import { comments } from "../../helpers/comments";
 import { useGetCommentsQuery } from "../../redux/commentApi";
+import { useSelector } from "react-redux";
+import { selectFilterValue } from "../../redux/filterSlice";
+import { useEffect, useState } from "react";
 // {
 //   useGetCommentsQuery, useAddCommentsMutation, useUpdateCommentCountMutation;
 // }
 export const Comments = () => {
+  const [filteredComments, setfilteredComments] = useState([]);
+
   const { data: comments } = useGetCommentsQuery();
-  console.log("comments: ", comments);
+  const filter = useSelector(selectFilterValue);
+
+  useEffect(() => {
+    const getComments = async () => {
+      try {
+        const filteredComments = await comments.filter((comment) =>
+          comment.content.toLowerCase().includes(filter.toLowerCase())
+        );
+        setfilteredComments(filteredComments);
+      } catch (error) {}
+    };
+    getComments();
+    // console.log(filteredComments);
+  }, [comments, filter]);
+
+  // if (!comments) {
+  //   return;
+  // }
 
   return (
     <Grid>
-      {comments &&
-        comments.map((comment) => <Comment key={comment.id} {...comment} />)}
+      {filteredComments.map((comment) => (
+        <Comment key={comment.id} {...comment} />
+      ))}
     </Grid>
   );
 };

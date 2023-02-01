@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+// import { createSelector } from "@reduxjs/toolkit";
 
 const initialState = {
   filter: "",
@@ -9,7 +10,6 @@ export const filterSlice = createSlice({
   initialState,
   reducers: {
     getfilteredComments: (state, action) => {
-      console.log("state: ", state);
       state.filter = action.payload;
     },
   },
