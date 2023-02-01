@@ -1,10 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
-import filterSlice from './filterSlice';
-import { commentApi } from './commentApi';
+import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/dist/query";
+import { filterSlice } from "./filterSlice";
+import { commentApi } from "./commentApi";
 
 export const store = configureStore({
   reducer: {
-    filter: filterSlice,
+    filter: filterSlice.reducer,
     [commentApi.reducerPath]: commentApi.reducer,
   },
   middleware: (getDefaultMiddleware) => [
@@ -12,3 +13,5 @@ export const store = configureStore({
     commentApi.middleware,
   ],
 });
+
+setupListeners(store.dispatch);
